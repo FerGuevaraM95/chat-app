@@ -1,4 +1,5 @@
 import React from 'react';
+import { ChatSelect } from '../components/ChatSelect';
 
 import { InboxPeople } from '../components/InboxPeople';
 import { Messages } from '../components/Messages';
@@ -12,8 +13,10 @@ export const ChatPage = () => {
 
             <InboxPeople />
 
-
-            <Messages />
+            {
+              (true) ? <Messages />
+              : <ChatSelect /> 
+            };
 
         </div>
 
