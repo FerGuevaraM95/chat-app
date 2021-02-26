@@ -56,9 +56,13 @@ export const LoginPage = () => {
 
     if(!ok) {
       Swal.fire('Error', 'Verifique el usuario y contraseña', 'error');
-    }
-    
+    };
   };
+
+  const allOk = () => {
+    const { email, password } = form;
+    return (email && password);
+  }
 
   return (
     <form 
@@ -115,7 +119,11 @@ export const LoginPage = () => {
       </div>
 
       <div className="container-login100-form-btn m-t-17">
-        <button className="login100-form-btn">Ingresar</button>
+        <button 
+          className="login100-form-btn"
+          type="submit"
+          disabled={!allOk()}
+        >Ingresar</button>
       </div>
     </form>
   );
