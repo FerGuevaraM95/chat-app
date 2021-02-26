@@ -20,7 +20,22 @@ export const AuthProvider = ({children}) => {
 
     const res = await fetchWithoutToken('login', {email, password}, 'POST');
 
-    console.log(res);
+    if(res.ok) {
+      localStorage.setItem('token', res.token);
+
+      const { user: { uid, name, email } } = res;
+
+      setAuth({
+        uid,
+        name,
+        email,
+        checking: false,
+        logged: true,
+      });
+
+    };
+
+    return res.ok;
 
   };
 
@@ -37,6 +52,7 @@ export const AuthProvider = ({children}) => {
   return (
     <AuthContext.Provider
       value={{
+          auth,
           login,
           register,
           checkToken,

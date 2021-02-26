@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import { AuthContext } from "../auth/AuthContext";
 
@@ -34,13 +35,13 @@ export const LoginPage = () => {
   };
 
   const toggleCheck = () => {
-    setForm({
+    setForm(form => ({
       ...form,
       rememberme: !form.rememberme,
-    });
+    }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     if(form.rememberme) {
@@ -51,7 +52,11 @@ export const LoginPage = () => {
     
     const { email, password } = form;
     
-    login(email, password);
+    const ok = await login(email, password);
+
+    if(!ok) {
+      Swal.fire('Error', 'Verifique el usuario y contraseña', 'error');
+    }
     
   };
 
