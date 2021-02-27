@@ -17,11 +17,11 @@ export const LoginPage = () => {
   useEffect(() => {
     const email = localStorage.getItem('email');
     if(email) {
-      setForm({
+      setForm((form) => ({
         ...form,
         email,
         rememberme: true,
-      });
+      }));
     };
   }, []);
 
@@ -62,7 +62,7 @@ export const LoginPage = () => {
   const allOk = () => {
     const { email, password } = form;
     return (email && password);
-  }
+  };
 
   return (
     <form 
