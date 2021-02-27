@@ -1,6 +1,6 @@
 import { createContext, useCallback, useState } from "react";
 
-import { fetchWithoutToken } from "../helpers/fetch";
+import { fetchWithoutToken, fetchWithToken } from "../helpers/fetch";
 
 export const AuthContext = createContext();
 
@@ -9,21 +9,21 @@ const initialState = {
   checking: true,
   logged: false,
   name: null,
-  email: null
+  email: null,
 };
 
-export const AuthProvider = ({children}) => {
-
+export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(initialState);
 
   const login = async (email, password) => {
+    const res = await fetchWithoutToken("login", { email, password }, "POST");
 
-    const res = await fetchWithoutToken('login', {email, password}, 'POST');
+    if (res.ok) {
+      localStorage.setItem("token", res.token);
 
-    if(res.ok) {
-      localStorage.setItem('token', res.token);
-
-      const { user: { uid, name, email } } = res;
+      const {
+        user: { uid, name, email },
+      } = res;
 
       setAuth({
         uid,
@@ -34,22 +34,24 @@ export const AuthProvider = ({children}) => {
       });
 
       console.log("Autenticado...");
-
-    };
+    }
 
     return res.ok;
-
   };
 
   const register = async (name, email, password) => {
+    const res = await fetchWithoutToken(
+      "login/new",
+      { name, email, password },
+      "POST"
+    );
 
-    const res = await fetchWithoutToken('login/new', {name, email, password}, 'POST');
+    if (res.ok) {
+      localStorage.setItem("token", res.token);
 
-
-    if(res.ok) {
-      localStorage.setItem('token', res.token);
-
-      const { user: { uid, name, email } } = res;
+      const {
+        user: { uid, name, email },
+      } = res;
 
       setAuth({
         uid,
@@ -61,30 +63,71 @@ export const AuthProvider = ({children}) => {
 
       console.log("Registrado!");
       return true;
+    }
+
+    return res.msg;
+  };
+
+  const checkToken = useCallback(async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setAuth({
+        uid: null,
+        checking: false,
+        logged: false,
+        name: null,
+        email: null,
+      });
+
+      return false;
 
     };
 
-    return res.msg;
+    const res = await fetchWithToken('login/renew');
 
-  };
+    if (res.ok) {
+      localStorage.setItem("token", res.token);
 
-  const checkToken = useCallback(() =>{}, []);
+      const { user: { uid, name, email } } = res;
 
-  const logout = () => {
+      setAuth({
+        uid,
+        name,
+        email,
+        checking: false,
+        logged: true,
+      });
 
-  };
+      console.log("Autenticado!");
+      return true;
+    } else {
+      setAuth({
+        uid: null,
+        name: null,
+        email: null,
+        checking: false,
+        logged: false,
+      });
+
+      return false;
+    };
+
+  }, []);
+
+  const logout = () => {};
 
   return (
     <AuthContext.Provider
       value={{
-          auth,
-          login,
-          register,
-          checkToken,
-          logout,
+        auth,
+        login,
+        register,
+        checkToken,
+        logout,
       }}
     >
-      { children }
+      {children}
     </AuthContext.Provider>
   );
 };

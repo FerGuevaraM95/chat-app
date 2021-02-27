@@ -1,4 +1,4 @@
-import React from 'react';
+import { useContext, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -8,8 +8,20 @@ import {
 
 import { AuthRouter } from './AuthRouter';
 import { ChatPage } from '../pages/ChatPage';
+import { AuthContext } from '../auth/AuthContext';
 
 export const AppRouter = () => {
+
+  const { auth, checkToken } = useContext(AuthContext);
+
+  useEffect(() => {
+    checkToken();
+  }, [checkToken]);
+
+  if(auth.checking) {
+    return(<h1>Por favor espere...</h1>);
+  };
+
   return (
     <Router>
       <div>
