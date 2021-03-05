@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
         logged: true,
       });
 
-      console.log("Autenticado...");
     }
 
     return res.ok;
@@ -99,7 +98,6 @@ export const AuthProvider = ({ children }) => {
         logged: true,
       });
 
-      console.log("Autenticado!");
       return true;
     } else {
       setAuth({
