@@ -32,9 +32,19 @@ export const SocketProvider = ({ children }) => {
         dispatch({
           type: types.usersLoaded,
           payload: users
-        })
+        });
       });
     }, [socket, dispatch]);
+
+    useEffect(() => {
+      socket?.on('personal-message', (message) => {
+        console.log(message);
+
+        // TODO: Dispatch de una acción
+        // TODO: Mover el scroll al final
+
+      });
+    }, [socket]);
     
     return (
         <SocketContext.Provider value={{ socket, online }}>
