@@ -1,38 +1,42 @@
-import { useState } from 'react';
+import { useState, useContext } from "react";
+
+import { AuthContext } from "../auth/AuthContext";
+import { ChatContext } from "../context/chat/ChatContext";
+import { SocketContext } from "../context/SocketContext";
 
 export const SendMessage = () => {
+  const [message, setMessage] = useState("");
+  const { socket } = useContext(SocketContext);
+  const { auth } = useContext(AuthContext);
+  const { chatState } = useContext(ChatContext);
 
-  const [message, setMessage] = useState('');
-
-  const onChange = ({target}) => {
+  const onChange = ({ target }) => {
     setMessage(target.value);
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if(!message) return;
-    setMessage('');
+    if (!message) return;
+    setMessage("");
 
-    // TODO: Emitir un evento de sockets para enviar el mensaje
-    // {
-    //   from: '',
-    //   to: '',
-    //   message: ''
-    // }
+    socket.emit("personal-message", {
+      from: auth.uid,
+      to: chatState.activeChat,
+      message
+    });
 
     // TODO: Hacer el dispatch del mensaje
-
   };
 
   return (
     <form onSubmit={onSubmit}>
       <div className="type_msg row">
         <div className="input_msg_write col-sm-9">
-          <input 
-            type="text" 
-            className="write_msg" 
-            placeholder="Mensaje..." 
+          <input
+            type="text"
+            className="write_msg"
+            placeholder="Mensaje..."
             value={message}
             onChange={onChange}
           />
