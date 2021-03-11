@@ -18,6 +18,19 @@ export const chatReducer = (state, action) => {
         messages: []
       }
     }
+    case types.newMessage: {
+      // console.log("funciona", state.activateChat, state.activateChat, action.payload.to)
+      if(state.activateChat === state.activateChat || 
+        state.activateChat === action.payload.to) {
+          // console.log("aqui!!!");
+        return {
+          ...state,
+          messages: [...state.messages, action.payload]
+        }
+      } else {
+        return state;
+      }
+    }
   
     default:
       return state;

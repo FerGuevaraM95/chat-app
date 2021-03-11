@@ -20,7 +20,7 @@ export const ChatPage = () => {
             {
               (chatState.activeChat) ? <Messages />
               : <ChatSelect /> 
-            };
+            }
 
         </div>
 
