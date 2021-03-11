@@ -1,4 +1,7 @@
+import { hourMonth } from "../helpers/hourMonth";
+
 export const IncomingMessage = ({msg}) => {
+
   return (
     <div className="incoming_msg">
       <div className="incoming_msg_img">
@@ -10,7 +13,7 @@ export const IncomingMessage = ({msg}) => {
       <div className="received_msg">
         <div className="received_withd_msg">
           <p>{msg.message}</p>
-          <span className="time_date"> 11:01 AM | June 9</span>
+          <span className="time_date"> {hourMonth(msg.createdAt)}</span>
         </div>
       </div>
     </div>
