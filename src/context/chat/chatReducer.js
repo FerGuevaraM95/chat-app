@@ -20,7 +20,7 @@ export const chatReducer = (state, action) => {
     }
     case types.newMessage: {
       // console.log("funciona", state.activateChat, state.activateChat, action.payload.to)
-      if(state.activateChat === state.activateChat || 
+      if(state.activateChat === action.payload.from || 
         state.activateChat === action.payload.to) {
           // console.log("aqui!!!");
         return {

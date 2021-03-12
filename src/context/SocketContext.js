@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect } from 'react';
 
 import { AuthContext } from '../auth/AuthContext';
+import { scrollToBottomAnimated } from '../helpers/scrollToBottom';
 import { useSocket } from '../hooks/useSocket'
 import { types } from '../types/types';
 import { ChatContext } from './chat/ChatContext';
@@ -43,7 +44,7 @@ export const SocketProvider = ({ children }) => {
           payload: message
         });
 
-        // TODO: Mover el scroll al final
+        scrollToBottomAnimated('messages');
 
       });
     }, [socket, dispatch]);
