@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 
 import { ChatContext } from '../context/chat/ChatContext';
+import { fetchWithToken } from '../helpers/fetch';
 import { types } from '../types/types';
 
 export const SideBarChatItem = ({user}) => {
@@ -9,11 +10,21 @@ export const SideBarChatItem = ({user}) => {
   const { chatState, dispatch } = useContext(ChatContext);
   const { activeChat } = chatState;
 
-  const onClick = () => {
+  const onClick = async () => {
     dispatch({
       type: types.activateChat,
       payload: user.uid,
     });
+
+    //Cargar los mensajes
+    const res = await fetchWithToken(`messages/${user.uid}`);
+
+    dispatch({
+      type: types.loadMessages,
+      payload: res.messages,
+    });
+
+    // Mover el scroll
 
   };
 
